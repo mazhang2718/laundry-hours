@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+  <head>
+    <style>
+
+      h1{
+        font-weight: 400;
+        font-family: "PT Sans", sans-serif;
+      }
+
+
+      rect:hover {
+        opacity: 0.5;     
+      }
+
+      .legend text{
+        font-family: "Helvetica", sans-serif;
+      }
+
+      .d3-tip {
+          line-height: 1;
+          font-weight: bold;
+          padding: 12px;
+          background: rgba(0, 0, 0, 0.8);
+          color: #fff;
+          border-radius: 2px;
+        }
+
+        /* Creates a small triangle extender for the tooltip */
+        .d3-tip:after {
+          box-sizing: border-box;
+          display: inline;
+          font-size: 10px;
+          width: 100%;
+          line-height: 1;
+          color: rgba(0, 0, 0, 0.8);
+          content: "\25BC";
+          position: absolute;
+          text-align: center;
+        }
+
+        /* Style northward tooltips differently */
+        .d3-tip.n:after {
+          margin: -1px 0 0 0;
+          top: 100%;
+          left: 0;
+        }
+
+        div{
+          display: inline-block;
+        }
+
+        .btn {
+          -webkit-border-radius: 8;
+          -moz-border-radius: 8;
+          border-radius: 8px;
+          color: #ffffff;
+          font-size: 15px;
+          background: #fe9929;
+          padding: 10px 20px 10px 20px;
+          text-decoration: none;
+          display: inline-block;
+          margin-right: 25px;
+        }
+
+        .btn:hover {
+          background: #ec7014;
+          text-decoration: none;
+        }
+
+        .active {
+          color: white;
+          -webkit-border-radius: 8;
+          -moz-border-radius: 8;
+          border-radius: 8px;
+          font-size: 20px;
+          background: #cc4c02;
+          padding: 10px 20px 10px 20px;
+          text-decoration: none;
+          display: inline-block;
+          margin-right: 32px;
+        }
+
+        span {
+          font-style: italic;
+        }
+
+      text{
+        font-family: "PT Sans", sans-serif;
+      }
+
+    </style>
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <h1> Number of people entering <span id="title"></span> every hour </h1>
+        <div id="dataset-picker">
+    </div>
+    <div id="chart"></div>
+
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script type="text/javascript">
+
+var blom = [{"hour":1,"day":7,"value":null},{"hour":2,"day":7,"value":null},{"hour":3,"day":7,"value":4},{"hour":4,"day":7,"value":39},{"hour":5,"day":7,"value":47},{"hour":6,"day":7,"value":60},{"hour":7,"day":7,"value":58},{"hour":8,"day":7,"value":56},{"hour":9,"day":7,"value":61},{"hour":10,"day":7,"value":64},{"hour":11,"day":7,"value":73},{"hour":12,"day":7,"value":76},{"hour":13,"day":7,"value":57},{"hour":14,"day":7,"value":39},{"hour":15,"day":7,"value":34},{"hour":16,"day":7,"value":36},{"hour":17,"day":7,"value":null},{"hour":1,"day":1,"value":null},{"hour":2,"day":1,"value":7},{"hour":3,"day":1,"value":12},{"hour":4,"day":1,"value":14},{"hour":5,"day":1,"value":20},{"hour":6,"day":1,"value":15},{"hour":7,"day":1,"value":13},{"hour":8,"day":1,"value":13},{"hour":9,"day":1,"value":24},{"hour":10,"day":1,"value":46},{"hour":11,"day":1,"value":43},{"hour":12,"day":1,"value":36},{"hour":13,"day":1,"value":26},{"hour":14,"day":1,"value":42},{"hour":15,"day":1,"value":36},{"hour":16,"day":1,"value":34},{"hour":17,"day":1,"value":11},{"hour":1,"day":2,"value":null},{"hour":2,"day":2,"value":6},{"hour":3,"day":2,"value":11},{"hour":4,"day":2,"value":16},{"hour":5,"day":2,"value":22},{"hour":6,"day":2,"value":18},{"hour":7,"day":2,"value":15},{"hour":8,"day":2,"value":16},{"hour":9,"day":2,"value":18},{"hour":10,"day":2,"value":41},{"hour":11,"day":2,"value":45},{"hour":12,"day":2,"value":44},{"hour":13,"day":2,"value":32},{"hour":14,"day":2,"value":34},{"hour":15,"day":2,"value":34},{"hour":16,"day":2,"value":35},{"hour":17,"day":2,"value":12},{"hour":1,"day":3,"value":null},{"hour":2,"day":3,"value":13},{"hour":3,"day":3,"value":26},{"hour":4,"day":3,"value":30},{"hour":5,"day":3,"value":37},{"hour":6,"day":3,"value":33},{"hour":7,"day":3,"value":23},{"hour":8,"day":3,"value":17},{"hour":9,"day":3,"value":16},{"hour":10,"day":3,"value":26},{"hour":11,"day":3,"value":39},{"hour":12,"day":3,"value":39},{"hour":13,"day":3,"value":36},{"hour":14,"day":3,"value":42},{"hour":15,"day":3,"value":37},{"hour":16,"day":3,"value":33},{"hour":17,"day":3,"value":12},{"hour":1,"day":4,"value":null},{"hour":2,"day":4,"value":7},{"hour":3,"day":4,"value":10},{"hour":4,"day":4,"value":14},{"hour":5,"day":4,"value":21},{"hour":6,"day":4,"value":19},{"hour":7,"day":4,"value":14},{"hour":8,"day":4,"value":13},{"hour":9,"day":4,"value":20},{"hour":10,"day":4,"value":34},{"hour":11,"day":4,"value":40},{"hour":12,"day":4,"value":37},{"hour":13,"day":4,"value":26},{"hour":14,"day":4,"value":24},{"hour":15,"day":4,"value":28},{"hour":16,"day":4,"value":27},{"hour":17,"day":4,"value":10},{"hour":1,"day":5,"value":null},{"hour":2,"day":5,"value":8},{"hour":3,"day":5,"value":9},{"hour":4,"day":5,"value":15},{"hour":5,"day":5,"value":19},{"hour":6,"day":5,"value":17},{"hour":7,"day":5,"value":15},{"hour":8,"day":5,"value":18},{"hour":9,"day":5,"value":32},{"hour":10,"day":5,"value":58},{"hour":11,"day":5,"value":53},{"hour":12,"day":5,"value":39},{"hour":13,"day":5,"value":29},{"hour":14,"day":5,"value":11},{"hour":15,"day":5,"value":null},{"hour":16,"day":5,"value":null},{"hour":17,"day":5,"value":null},{"hour":1,"day":6,"value":null},{"hour":2,"day":6,"value":null},{"hour":3,"day":6,"value":0},{"hour":4,"day":6,"value":17},{"hour":5,"day":6,"value":24},{"hour":6,"day":6,"value":20},{"hour":7,"day":6,"value":22},{"hour":8,"day":6,"value":21},{"hour":9,"day":6,"value":26},{"hour":10,"day":6,"value":26},{"hour":11,"day":6,"value":33},{"hour":12,"day":6,"value":20},{"hour":13,"day":6,"value":0},{"hour":14,"day":6,"value":null},{"hour":15,"day":6,"value":null},{"hour":16,"day":6,"value":null},{"hour":17,"day":6,"value":null}];
+
+
+    var spac = [{"hour":1,"day":7,"value":null},{"hour":2,"day":7,"value":null},{"hour":3,"day":7,"value":39},{"hour":4,"day":7,"value":47},{"hour":5,"day":7,"value":60},{"hour":6,"day":7,"value":58},{"hour":7,"day":7,"value":56},{"hour":8,"day":7,"value":61},{"hour":9,"day":7,"value":64},{"hour":10,"day":7,"value":73},{"hour":11,"day":7,"value":76},{"hour":12,"day":7,"value":57},{"hour":13,"day":7,"value":39},{"hour":14,"day":7,"value":34},{"hour":15,"day":7,"value":36},{"hour":16,"day":7,"value":17},{"hour":17,"day":7,"value":null},{"hour":1,"day":1,"value":48},{"hour":2,"day":1,"value":46},{"hour":3,"day":1,"value":49},{"hour":4,"day":1,"value":56},{"hour":5,"day":1,"value":58},{"hour":6,"day":1,"value":84},{"hour":7,"day":1,"value":57},{"hour":8,"day":1,"value":50},{"hour":9,"day":1,"value":59},{"hour":10,"day":1,"value":88},{"hour":11,"day":1,"value":113},{"hour":12,"day":1,"value":207},{"hour":13,"day":1,"value":110},{"hour":14,"day":1,"value":73},{"hour":15,"day":1,"value":82},{"hour":16,"day":1,"value":58},{"hour":17,"day":1,"value":14},{"hour":1,"day":2,"value":65},{"hour":2,"day":2,"value":55},{"hour":3,"day":2,"value":45},{"hour":4,"day":2,"value":54},{"hour":5,"day":2,"value":61},{"hour":6,"day":2,"value":77},{"hour":7,"day":2,"value":62},{"hour":8,"day":2,"value":56},{"hour":9,"day":2,"value":67},{"hour":10,"day":2,"value":81},{"hour":11,"day":2,"value":109},{"hour":12,"day":2,"value":216},{"hour":13,"day":2,"value":143},{"hour":14,"day":2,"value":85},{"hour":15,"day":2,"value":100},{"hour":16,"day":2,"value":72},{"hour":17,"day":2,"value":16},{"hour":1,"day":3,"value":58},{"hour":2,"day":3,"value":60},{"hour":3,"day":3,"value":57},{"hour":4,"day":3,"value":56},{"hour":5,"day":3,"value":57},{"hour":6,"day":3,"value":96},{"hour":7,"day":3,"value":61},{"hour":8,"day":3,"value":51},{"hour":9,"day":3,"value":54},{"hour":10,"day":3,"value":83},{"hour":11,"day":3,"value":119},{"hour":12,"day":3,"value":217},{"hour":13,"day":3,"value":131},{"hour":14,"day":3,"value":93},{"hour":15,"day":3,"value":88},{"hour":16,"day":3,"value":73},{"hour":17,"day":3,"value":17},{"hour":1,"day":4,"value":57},{"hour":2,"day":4,"value":42},{"hour":3,"day":4,"value":39},{"hour":4,"day":4,"value":46},{"hour":5,"day":4,"value":56},{"hour":6,"day":4,"value":74},{"hour":7,"day":4,"value":52},{"hour":8,"day":4,"value":50},{"hour":9,"day":4,"value":58},{"hour":10,"day":4,"value":71},{"hour":11,"day":4,"value":98},{"hour":12,"day":4,"value":177},{"hour":13,"day":4,"value":125},{"hour":14,"day":4,"value":79},{"hour":15,"day":4,"value":89},{"hour":16,"day":4,"value":59},{"hour":17,"day":4,"value":15},{"hour":1,"day":5,"value":48},{"hour":2,"day":5,"value":47},{"hour":3,"day":5,"value":56},{"hour":4,"day":5,"value":58},{"hour":5,"day":5,"value":65},{"hour":6,"day":5,"value":94},{"hour":7,"day":5,"value":75},{"hour":8,"day":5,"value":65},{"hour":9,"day":5,"value":85},{"hour":10,"day":5,"value":109},{"hour":11,"day":5,"value":132},{"hour":12,"day":5,"value":171},{"hour":13,"day":5,"value":84},{"hour":14,"day":5,"value":46},{"hour":15,"day":5,"value":43},{"hour":16,"day":5,"value":15},{"hour":17,"day":5,"value":null},{"hour":1,"day":6,"value":null},{"hour":2,"day":6,"value":null},{"hour":3,"day":6,"value":72},{"hour":4,"day":6,"value":114},{"hour":5,"day":6,"value":94},{"hour":6,"day":6,"value":74},{"hour":7,"day":6,"value":64},{"hour":8,"day":6,"value":70},{"hour":9,"day":6,"value":78},{"hour":10,"day":6,"value":86},{"hour":11,"day":6,"value":95},{"hour":12,"day":6,"value":69},{"hour":13,"day":6,"value":48},{"hour":14,"day":6,"value":46},{"hour":15,"day":6,"value":0},{"hour":16,"day":6,"value":null},{"hour":17,"day":6,"value":null}];
+
+    var patten = [{"hour":1,"day":7,"value":null},{"hour":2,"day":7,"value":null},{"hour":3,"day":7,"value":0},{"hour":4,"day":7,"value":0},{"hour":5,"day":7,"value":14},{"hour":6,"day":7,"value":4},{"hour":7,"day":7,"value":4},{"hour":8,"day":7,"value":7},{"hour":9,"day":7,"value":6},{"hour":10,"day":7,"value":5},{"hour":11,"day":7,"value":7},{"hour":12,"day":7,"value":4},{"hour":13,"day":7,"value":9},{"hour":14,"day":7,"value":7},{"hour":15,"day":7,"value":5},{"hour":16,"day":7,"value":4},{"hour":17,"day":7,"value":null},{"hour":1,"day":1,"value":null},{"hour":2,"day":1,"value":null},{"hour":3,"day":1,"value":null},{"hour":4,"day":1,"value":null},{"hour":5,"day":1,"value":null},{"hour":6,"day":1,"value":0},{"hour":7,"day":1,"value":0},{"hour":8,"day":1,"value":0},{"hour":9,"day":1,"value":5},{"hour":10,"day":1,"value":8},{"hour":11,"day":1,"value":12},{"hour":12,"day":1,"value":12},{"hour":13,"day":1,"value":16},{"hour":14,"day":1,"value":14},{"hour":15,"day":1,"value":13},{"hour":16,"day":1,"value":10},{"hour":17,"day":1,"value":3},{"hour":1,"day":2,"value":null},{"hour":2,"day":2,"value":null},{"hour":3,"day":2,"value":null},{"hour":4,"day":2,"value":null},{"hour":5,"day":2,"value":null},{"hour":6,"day":2,"value":0},{"hour":7,"day":2,"value":0},{"hour":8,"day":2,"value":0},{"hour":9,"day":2,"value":6},{"hour":10,"day":2,"value":9},{"hour":11,"day":2,"value":14},{"hour":12,"day":2,"value":16},{"hour":13,"day":2,"value":18},{"hour":14,"day":2,"value":11},{"hour":15,"day":2,"value":14},{"hour":16,"day":2,"value":12},{"hour":17,"day":2,"value":10},{"hour":1,"day":3,"value":null},{"hour":2,"day":3,"value":null},{"hour":3,"day":3,"value":null},{"hour":4,"day":3,"value":null},{"hour":5,"day":3,"value":null},{"hour":6,"day":3,"value":0},{"hour":7,"day":3,"value":0},{"hour":8,"day":3,"value":0},{"hour":9,"day":3,"value":6},{"hour":10,"day":3,"value":8},{"hour":11,"day":3,"value":9},{"hour":12,"day":3,"value":11},{"hour":13,"day":3,"value":12},{"hour":14,"day":3,"value":7},{"hour":15,"day":3,"value":11},{"hour":16,"day":3,"value":9},{"hour":17,"day":3,"value":3},{"hour":1,"day":4,"value":null},{"hour":2,"day":4,"value":null},{"hour":3,"day":4,"value":null},{"hour":4,"day":4,"value":null},{"hour":5,"day":4,"value":null},{"hour":6,"day":4,"value":0},{"hour":7,"day":4,"value":0},{"hour":8,"day":4,"value":0},{"hour":9,"day":4,"value":4},{"hour":10,"day":4,"value":8},{"hour":11,"day":4,"value":10},{"hour":12,"day":4,"value":13},{"hour":13,"day":4,"value":11},{"hour":14,"day":4,"value":11},{"hour":15,"day":4,"value":13},{"hour":16,"day":4,"value":15},{"hour":17,"day":4,"value":5},{"hour":1,"day":5,"value":null},{"hour":2,"day":5,"value":null},{"hour":3,"day":5,"value":null},{"hour":4,"day":5,"value":null},{"hour":5,"day":5,"value":null},{"hour":6,"day":5,"value":0},{"hour":7,"day":5,"value":0},{"hour":8,"day":5,"value":0},{"hour":9,"day":5,"value":5},{"hour":10,"day":5,"value":9},{"hour":11,"day":5,"value":19},{"hour":12,"day":5,"value":14},{"hour":13,"day":5,"value":14},{"hour":14,"day":5,"value":5},{"hour":15,"day":5,"value":0},{"hour":16,"day":5,"value":null},{"hour":17,"day":5,"value":null},{"hour":1,"day":6,"value":null},{"hour":2,"day":6,"value":null},{"hour":3,"day":6,"value":0},{"hour":4,"day":6,"value":0},{"hour":5,"day":6,"value":6},{"hour":6,"day":6,"value":3},{"hour":7,"day":6,"value":15},{"hour":8,"day":6,"value":18},{"hour":9,"day":6,"value":8},{"hour":10,"day":6,"value":18},{"hour":11,"day":6,"value":8},{"hour":12,"day":6,"value":18},{"hour":13,"day":6,"value":10},{"hour":14,"day":6,"value":6},{"hour":15,"day":6,"value":null},{"hour":16,"day":6,"value":null},{"hour":17,"day":6,"value":null}];
+
+
+    var total = [{"hour":1,"day":7,"value":0},{"hour":2,"day":7,"value":0},{"hour":3,"day":7,"value":43},{"hour":4,"day":7,"value":86},{"hour":5,"day":7,"value":121},{"hour":6,"day":7,"value":122},{"hour":7,"day":7,"value":118},{"hour":8,"day":7,"value":124},{"hour":9,"day":7,"value":131},{"hour":10,"day":7,"value":142},{"hour":11,"day":7,"value":156},{"hour":12,"day":7,"value":137},{"hour":13,"day":7,"value":105},{"hour":14,"day":7,"value":80},{"hour":15,"day":7,"value":75},{"hour":16,"day":7,"value":57},{"hour":17,"day":7,"value":0},{"hour":1,"day":1,"value":48},{"hour":2,"day":1,"value":53},{"hour":3,"day":1,"value":61},{"hour":4,"day":1,"value":70},{"hour":5,"day":1,"value":78},{"hour":6,"day":1,"value":99},{"hour":7,"day":1,"value":70},{"hour":8,"day":1,"value":63},{"hour":9,"day":1,"value":88},{"hour":10,"day":1,"value":142},{"hour":11,"day":1,"value":168},{"hour":12,"day":1,"value":255},{"hour":13,"day":1,"value":152},{"hour":14,"day":1,"value":129},{"hour":15,"day":1,"value":131},{"hour":16,"day":1,"value":102},{"hour":17,"day":1,"value":28},{"hour":1,"day":2,"value":65},{"hour":2,"day":2,"value":61},{"hour":3,"day":2,"value":56},{"hour":4,"day":2,"value":70},{"hour":5,"day":2,"value":83},{"hour":6,"day":2,"value":95},{"hour":7,"day":2,"value":77},{"hour":8,"day":2,"value":72},{"hour":9,"day":2,"value":91},{"hour":10,"day":2,"value":131},{"hour":11,"day":2,"value":168},{"hour":12,"day":2,"value":276},{"hour":13,"day":2,"value":193},{"hour":14,"day":2,"value":130},{"hour":15,"day":2,"value":148},{"hour":16,"day":2,"value":119},{"hour":17,"day":2,"value":38},{"hour":1,"day":3,"value":58},{"hour":2,"day":3,"value":73},{"hour":3,"day":3,"value":83},{"hour":4,"day":3,"value":86},{"hour":5,"day":3,"value":94},{"hour":6,"day":3,"value":129},{"hour":7,"day":3,"value":84},{"hour":8,"day":3,"value":68},{"hour":9,"day":3,"value":76},{"hour":10,"day":3,"value":117},{"hour":11,"day":3,"value":167},{"hour":12,"day":3,"value":267},{"hour":13,"day":3,"value":179},{"hour":14,"day":3,"value":142},{"hour":15,"day":3,"value":136},{"hour":16,"day":3,"value":115},{"hour":17,"day":3,"value":32},{"hour":1,"day":4,"value":57},{"hour":2,"day":4,"value":49},{"hour":3,"day":4,"value":49},{"hour":4,"day":4,"value":60},{"hour":5,"day":4,"value":77},{"hour":6,"day":4,"value":93},{"hour":7,"day":4,"value":66},{"hour":8,"day":4,"value":63},{"hour":9,"day":4,"value":82},{"hour":10,"day":4,"value":113},{"hour":11,"day":4,"value":148},{"hour":12,"day":4,"value":227},{"hour":13,"day":4,"value":162},{"hour":14,"day":4,"value":114},{"hour":15,"day":4,"value":130},{"hour":16,"day":4,"value":101},{"hour":17,"day":4,"value":30},{"hour":1,"day":5,"value":48},{"hour":2,"day":5,"value":55},{"hour":3,"day":5,"value":65},{"hour":4,"day":5,"value":73},{"hour":5,"day":5,"value":84},{"hour":6,"day":5,"value":111},{"hour":7,"day":5,"value":90},{"hour":8,"day":5,"value":83},{"hour":9,"day":5,"value":122},{"hour":10,"day":5,"value":176},{"hour":11,"day":5,"value":204},{"hour":12,"day":5,"value":224},{"hour":13,"day":5,"value":127},{"hour":14,"day":5,"value":62},{"hour":15,"day":5,"value":43},{"hour":16,"day":5,"value":15},{"hour":17,"day":5,"value":0},{"hour":1,"day":6,"value":0},{"hour":2,"day":6,"value":0},{"hour":3,"day":6,"value":72},{"hour":4,"day":6,"value":131},{"hour":5,"day":6,"value":124},{"hour":6,"day":6,"value":97},{"hour":7,"day":6,"value":101},{"hour":8,"day":6,"value":109},{"hour":9,"day":6,"value":112},{"hour":10,"day":6,"value":130},{"hour":11,"day":6,"value":136},{"hour":12,"day":6,"value":107},{"hour":13,"day":6,"value":58},{"hour":14,"day":6,"value":52},{"hour":15,"day":6,"value":0},{"hour":16,"day":6,"value":0},{"hour":17,"day":6,"value":0}];
+
+      var margin = { top: 50, right: 0, bottom: 100, left: 30 },
+          width = 960 - margin.left - margin.right,
+          height = 550 - margin.top - margin.bottom,
+          gridSize = Math.floor(width / 20),
+          legendElementWidth = gridSize*2.25,
+          buckets = 9,
+          colors = ['white','#deebf7','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#08519c','#08306b'], // alternatively colorbrewer.YlGnBu[9]
+          days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          times = ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"],
+          datasets = [total, spac, blom, patten];
+          datasetNames = [ "all gyms", "Henry Crown Sports Pavilion", "Blomquist Recreation Center","Patten Gymnasium"];
+
+
+      var svg = d3.select("#chart").append("svg")
+          .attr("width", 960)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+      var dayLabels = svg.selectAll(".dayLabel")
+          .data(days)
+          .enter().append("text")
+            .text(function (d) { return d; })
+            .attr("x", 0)
+            .attr("y", function (d, i) { return i * gridSize; })
+            .attr("transform", "translate(-6," + gridSize / 1.5 + ")");
+
+      var timeLabels = svg.selectAll(".timeLabel")
+          .data(times)
+          .enter().append("text")
+            .text(function(d) { return d; })
+            .attr("x", function(d, i) { return i * gridSize; })
+            .attr("y", 0)
+            .style("text-anchor", "middle")
+            .attr("transform", "translate(" + (gridSize / 2 + 80) + ", -6)");
+
+
+
+      var createMap = function(data, names){
+          document.getElementById("title").innerHTML = names;
+
+            // Create Tooltips
+
+            var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(d) {
+              if (d.value==null){
+                return "<strong> Gym is closed </strong>";
+              }
+              else{
+              return "<strong>People Entering:</strong> <span style='color:red'>" + d.value + "</span>";
+            }
+            });
+
+            svg.call(tip);
+
+            //Create Color Scale
+
+          var colorScale = d3.scale.quantile()
+              .domain([0, d3.max(data, function (d) { return d.value; })])
+              .range(colors);
+
+              //Finds max value in each dataset
+
+          var max = d3.max(data, function (d) { return d.value; });
+
+          //Creates value boxes
+
+          var cards = svg.selectAll(".hour")
+              .data(data);
+
+          cards.append("title");
+
+          cards.enter().append("rect")
+              .attr("x", function(d) { return (d.hour - 1) * gridSize + 90; })
+              .attr("y", function(d) { return (d.day - 1) * gridSize; })
+              .attr("width", gridSize)
+              .attr("height", gridSize)
+              .style("fill", colors[0])
+              .on('mouseover', tip.show)
+              .on('mouseout', tip.hide);
+
+          cards.transition().duration(1000)
+              .style("fill", function(d) { 
+                if (d.value==null){
+                  return "gray";
+                }
+                else{
+                  return colorScale(d.value); 
+                }
+              });
+
+          cards.select("title").text(function(d) { return d.value; });
+          
+          cards.exit().remove();
+
+          //Creates legend
+
+          var legend = svg.selectAll(".legend")
+              .data([0].concat(colorScale.quantiles()), function(d) { return d; });
+
+          legend.enter().append("g")
+              .attr("class", "legend");
+
+            legend.append("text")
+              .text("Legend (in students per hour):")
+              .attr("y", (height-20));
+
+          legend.append("rect")
+            .attr("x", function(d, i) { return legendElementWidth * i; })
+            .attr("y", (height))
+            .attr("width", legendElementWidth)
+            .attr("height", gridSize / 2)
+            .style("fill", function(d, i) { return colors[i]; });
+
+
+           legend.append("rect")
+              .attr("x", 0)
+              .attr("y", height+55)
+            .attr("width", legendElementWidth)
+            .attr("height", gridSize / 2)
+            .style("fill", "gray");
+
+            legend.append("text")
+            .text("Gym is closed")
+            .attr("x", 0)
+            .attr("y", height + 95);
+        
+
+          legend.append("text")
+            .text(function(d) { return '≥ ' + Math.round(d);})
+            .attr("x", function(d, i) { return legendElementWidth * i + 17; })
+            .attr("y", height + gridSize);
+
+
+
+
+          legend.exit().remove();
+
+        };
+
+
+
+        //Creates Map for first dataset
+
+      createMap(datasets[0], datasetNames[0]);
+
+      //Attaches Data to Button Classes
+
+      var datasetpicker = d3.select("#dataset-picker").selectAll(".btn")
+        .data(datasets);
+/*
+      var buttons = document.querySelectorAll('.btn');
+      console.log(buttons);
+      buttons[0].classList.add('active');
+      */
+
+      datasetpicker.enter()
+        .append("div")
+        .append("text")
+        .text(function(d, i){ return datasetNames[i]})
+        .attr("class", "btn")
+        .on("click", function(d, i) {
+          var buttons = document.querySelectorAll('.btn');
+          for (j = 0; j<buttons.length; j++){
+                buttons[j].classList.remove('active'); 
+              }
+          this.classList.add('active');
+          createMap(d, datasetNames[i]);
+        });
+
+    </script>
+  </body>
+</html>
+
